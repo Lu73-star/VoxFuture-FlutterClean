@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/splash_screen.dart';
+import 'config/theme.dart';
+import 'config/routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,15 +13,11 @@ class VoxFutureApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'VoxFuture',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0A0A0F),
-        primaryColor: const Color(0xFFFFC727),
-        fontFamily: 'Roboto',
-      ),
-      home: const SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.theme,
+      initialRoute: AppRoutes.splash,
+      onGenerateRoute: AppRoutes.generateRoute,
     );
   }
 }
