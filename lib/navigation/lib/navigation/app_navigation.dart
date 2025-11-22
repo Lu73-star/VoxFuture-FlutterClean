@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
-import '../config/routes.dart';
+import 'package:voxfuture_flutterclean/screens/splash_screen.dart';
+import 'package:voxfuture_flutterclean/screens/home_screen.dart';
+import 'package:voxfuture_flutterclean/screens/login_screen.dart';
+import 'package:voxfuture_flutterclean/screens/register_screen.dart';
 
 class AppNavigation {
-  static void goToHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      AppRoutes.home,
-      (route) => false,
-    );
-  }
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
 
-  static void goToLogin(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      AppRoutes.login,
-      (route) => false,
-    );
-  }
+      case '/home':
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
 
-  static void goToPrediction(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.prediction);
-  }
+      case '/login':
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
 
-  static void goToSplash(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      AppRoutes.splash,
-      (route) => false,
-    );
-  }
+      case '/register':
+        return MaterialPageRoute(builder: (_) => const RegisterScreen());
 
-  static void goToHistory(BuildContext context) {
-    Navigator.pushNamed(context, "/history");
+      default:
+        return MaterialPageRoute(
+          builder: (_) => const Scaffold(
+            body: Center(
+              child: Text(
+                'Rota não encontrada',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+          ),
+        );
+    }
   }
 }
