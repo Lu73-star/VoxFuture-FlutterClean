@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import '../../utils/constants.dart';
+import '../home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,85 +13,91 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(
-          'Entrar',
-          style: TextStyle(
-            color: Colors.amber,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.black,
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'E-mail',
+              "VoxFuture Login",
               style: TextStyle(
-                color: Colors.amber,
-                fontSize: 16,
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 30),
+
             TextField(
               controller: emailController,
               style: const TextStyle(color: Colors.white),
               decoration: const InputDecoration(
-                filled: true,
-                fillColor: Colors.black54,
-                border: OutlineInputBorder(),
+                labelText: "Email",
+                labelStyle: TextStyle(color: Colors.white70),
               ),
             ),
 
             const SizedBox(height: 20),
 
-            const Text(
-              'Senha',
-              style: TextStyle(
-                color: Colors.amber,
-                fontSize: 16,
-              ),
-            ),
             TextField(
               controller: passwordController,
               obscureText: true,
               style: const TextStyle(color: Colors.white),
               decoration: const InputDecoration(
-                filled: true,
-                fillColor: Colors.black54,
-                border: OutlineInputBorder(),
+                labelText: "Senha",
+                labelStyle: TextStyle(color: Colors.white70),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 25),
 
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Firebase login será implementado depois
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber,
-                ),
-                child: const Text(
-                  'Entrar',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
+            loading
+                ? const CircularProgressIndicator(color: Colors.blue)
+                : ElevatedButton(
+                    onPressed: () async {
+                      setState(() => loading = true);
+
+                      final result = await AuthService.login(
+                        emailController.text.trim(),
+                        passwordController.text.trim(),
+                      );
+
+                      setState(() => loading = false);
+
+                      if (result == true) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const HomeScreen(),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(result.toString()),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 40,
+                      ),
+                    ),
+                    child: const Text(
+                      "Entrar",
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
