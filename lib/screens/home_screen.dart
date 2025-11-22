@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../navigation/app_navigation.dart';
+import '../theme/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -6,102 +8,99 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
         title: const Text(
-          'VoxFuture',
+          "VoxFuture",
           style: TextStyle(
-            color: Colors.amber,
-            fontSize: 22,
+            color: Colors.white,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
       ),
+
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 20),
 
-            // Botão Nova Previsão
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navegar para criação de previsão
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  'Nova Previsão',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Botão Histórico
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navegar para histórico
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black54,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  'Histórico de Análises',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.amber,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Botão Assinaturas
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navegar para planos
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black54,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  'Plano de Assinatura',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.amber,
-                  ),
-                ),
-              ),
-            ),
-
-            const Spacer(),
+            const SizedBox(height: 40),
 
             const Text(
-              'Versão 1.0.0',
+              "Escolha uma opção",
               style: TextStyle(
-                color: Colors.white54,
-                fontSize: 14,
+                color: Colors.white70,
+                fontSize: 18,
               ),
             ),
+
+            const SizedBox(height: 50),
+
+            _menuButton(
+              context,
+              title: "Nova Previsão",
+              icon: Icons.auto_fix_high_rounded,
+              route: AppNavigation.predictionRoute,
+            ),
+
+            const SizedBox(height: 20),
+
+            _menuButton(
+              context,
+              title: "Histórico de Análises",
+              icon: Icons.history_rounded,
+              route: AppNavigation.historyRoute,
+            ),
+
+            const SizedBox(height: 20),
+
+            _menuButton(
+              context,
+              title: "Planos de Assinatura",
+              icon: Icons.workspace_premium_rounded,
+              route: AppNavigation.subscriptionRoute,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _menuButton(BuildContext context,
+      {required String title, required IconData icon, required String route}) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, route),
+      child: Container(
+        height: 65,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.amberAccent, width: 1.3),
+          gradient: LinearGradient(
+            colors: [
+              Colors.black.withOpacity(0.4),
+              Colors.black.withOpacity(0.2),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Row(
+          children: [
+            const SizedBox(width: 20),
+            Icon(icon, color: Colors.amberAccent, size: 30),
+            const SizedBox(width: 20),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            )
           ],
         ),
       ),
