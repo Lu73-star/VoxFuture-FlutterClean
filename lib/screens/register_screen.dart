@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import '../../utils/constants.dart';
+import '../home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -8,79 +11,41 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(
-          'Criar Conta',
-          style: TextStyle(
-            color: Colors.amber,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.black,
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.person_add,
-                color: Colors.amber,
-                size: 80,
-              ),
-
-              const SizedBox(height: 30),
+              const SizedBox(height: 80),
 
               const Text(
-                'Criar nova conta',
+                "Criar Conta VoxFuture",
                 style: TextStyle(
-                  color: Colors.amber,
-                  fontSize: 26,
+                  color: Colors.white,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 40),
-
-              TextField(
-                controller: nameController,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Nome',
-                  labelStyle: const TextStyle(color: Colors.amber),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.amber),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.amberAccent),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
 
               TextField(
                 controller: emailController,
                 style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  labelStyle: const TextStyle(color: Colors.amber),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.amber),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.amberAccent),
-                  ),
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  labelStyle: TextStyle(color: Colors.white70),
                 ),
               ),
 
@@ -90,39 +55,84 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: passwordController,
                 obscureText: true,
                 style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Senha',
-                  labelStyle: const TextStyle(color: Colors.amber),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.amber),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.amberAccent),
-                  ),
+                decoration: const InputDecoration(
+                  labelText: "Senha",
+                  labelStyle: TextStyle(color: Colors.white70),
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Implementação do cadastro será adicionada depois
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: const Text(
-                    'Criar conta',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
+              TextField(
+                controller: confirmController,
+                obscureText: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  labelText: "Confirmar Senha",
+                  labelStyle: TextStyle(color: Colors.white70),
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              loading
+                  ? const CircularProgressIndicator(color: Colors.blue)
+                  : ElevatedButton(
+                      onPressed: () async {
+                        if (passwordController.text.trim() !=
+                            confirmController.text.trim()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("As senhas não coincidem."),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        setState(() {
+                          loading = true;
+                        });
+
+                        final result = await AuthService.register(
+                          emailController.text.trim(),
+                          passwordController.text.trim(),
+                        );
+
+                        setState(() {
+                          loading = false;
+                        });
+
+                        if (result == true) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const HomeScreen(),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(result.toString()),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 40,
+                        ),
+                      ),
+                      child: const Text(
+                        "Cadastrar",
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
-                  ),
-                ),
-              ),
+
+              const SizedBox(height: 40),
             ],
           ),
         ),
