@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../navigation/app_navigation.dart';
-import '../theme/app_theme.dart';
+import '../services/auth_service.dart';
+import '../utils/custom_colors.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,62 +9,71 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         elevation: 0,
         centerTitle: true,
         title: const Text(
           "VoxFuture",
           style: TextStyle(
+            fontSize: 22,
             color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: () async {
+              await AuthService().logout();
+              AppNavigation.goToLogin(context);
+            },
+          ),
+        ],
       ),
 
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
 
             const Text(
-              "Escolha uma opção",
+              "O que deseja fazer?",
               style: TextStyle(
-                color: Colors.white70,
-                fontSize: 18,
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
 
-            const SizedBox(height: 50),
+            const SizedBox(height: 40),
 
-            _menuButton(
+            _homeButton(
               context,
               title: "Nova Previsão",
-              icon: Icons.auto_fix_high_rounded,
-              route: AppNavigation.predictionRoute,
+              icon: Icons.auto_awesome,
+              action: () => AppNavigation.goToPrediction(context),
             ),
 
             const SizedBox(height: 20),
 
-            _menuButton(
+            _homeButton(
               context,
               title: "Histórico de Análises",
-              icon: Icons.history_rounded,
-              route: AppNavigation.historyRoute,
+              icon: Icons.history,
+              action: () => AppNavigation.goToHistory(context),
             ),
 
             const SizedBox(height: 20),
 
-            _menuButton(
+            _homeButton(
               context,
               title: "Planos de Assinatura",
-              icon: Icons.workspace_premium_rounded,
-              route: AppNavigation.subscriptionRoute,
+              icon: Icons.star,
+              action: () => AppNavigation.goToPlans(context),
             ),
           ],
         ),
@@ -71,36 +81,34 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _menuButton(BuildContext context,
-      {required String title, required IconData icon, required String route}) {
+  Widget _homeButton(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required VoidCallback action,
+  }) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, route),
+      onTap: action,
       child: Container(
-        height: 65,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 18),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.amberAccent, width: 1.3),
-          gradient: LinearGradient(
-            colors: [
-              Colors.black.withOpacity(0.4),
-              Colors.black.withOpacity(0.2),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: CustomColors.primary,
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(width: 20),
-            Icon(icon, color: Colors.amberAccent, size: 30),
-            const SizedBox(width: 20),
+            Icon(icon, color: Colors.white),
+            const SizedBox(width: 12),
             Text(
               title,
               style: const TextStyle(
+                fontSize: 16,
                 color: Colors.white,
-                fontSize: 18,
+                fontWeight: FontWeight.w600,
               ),
-            )
+            ),
           ],
         ),
       ),
