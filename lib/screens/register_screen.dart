@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../services/auth_service.dart';
-import '../../utils/constants.dart';
-import '../home_screen.dart';
+import '../navigation/app_navigation.dart';
+import '../services/auth_service.dart';
+import '../utils/custom_colors.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,7 +13,6 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmController = TextEditingController();
 
   bool loading = false;
 
@@ -22,120 +21,129 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 80),
-
-              const Text(
-                "Criar Conta VoxFuture",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Criar Conta",
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
               ),
+            ),
 
-              const SizedBox(height: 30),
+            const SizedBox(height: 40),
 
-              TextField(
-                controller: emailController,
-                style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  labelStyle: TextStyle(color: Colors.white70),
-                ),
+            _input("Email", emailController, Icons.email),
+            const SizedBox(height: 20),
+            _input("Senha", passwordController, Icons.lock, obscure: true),
+
+            const SizedBox(height: 40),
+
+            _button(
+              label: loading ? "Processando..." : "Registrar",
+              onTap: loading
+                  ? null
+                  : () async {
+                      setState(() => loading = true);
+
+                      final result = await AuthService().register(
+                        emailController.text.trim(),
+                        passwordController.text.trim(),
+                      );
+
+                      setState(() => loading = false);
+
+                      if (result == true) {
+                        AppNavigation.goToHome(context);
+                      } else {
+                        _alert(context, "Erro", result.toString());
+                      }
+                    },
+            ),
+
+            const SizedBox(height: 20),
+
+            TextButton(
+              onPressed: () => AppNavigation.goToLogin(context),
+              child: const Text(
+                "Já tenho conta",
+                style: TextStyle(color: Colors.white70),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-              const SizedBox(height: 20),
+  Widget _input(
+    String label,
+    TextEditingController controller,
+    IconData icon, {
+    bool obscure = false,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: obscure,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.white70),
+        prefixIcon: Icon(icon, color: Colors.white70),
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white24),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
 
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                  labelText: "Senha",
-                  labelStyle: TextStyle(color: Colors.white70),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              TextField(
-                controller: confirmController,
-                obscureText: true,
-                style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                  labelText: "Confirmar Senha",
-                  labelStyle: TextStyle(color: Colors.white70),
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              loading
-                  ? const CircularProgressIndicator(color: Colors.blue)
-                  : ElevatedButton(
-                      onPressed: () async {
-                        if (passwordController.text.trim() !=
-                            confirmController.text.trim()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("As senhas não coincidem."),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                          return;
-                        }
-
-                        setState(() {
-                          loading = true;
-                        });
-
-                        final result = await AuthService.register(
-                          emailController.text.trim(),
-                          passwordController.text.trim(),
-                        );
-
-                        setState(() {
-                          loading = false;
-                        });
-
-                        if (result == true) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(result.toString()),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                          horizontal: 40,
-                        ),
-                      ),
-                      child: const Text(
-                        "Cadastrar",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-
-              const SizedBox(height: 40),
-            ],
+  Widget _button({required String label, required VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: CustomColors.primary,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _alert(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.black,
+        title: Text(title, style: const TextStyle(color: Colors.white)),
+        content:
+            Text(message, style: const TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child:
+                const Text("OK", style: TextStyle(color: Colors.white)),
+          ),
+        ],
       ),
     );
   }
