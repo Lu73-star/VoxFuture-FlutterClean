@@ -7,42 +7,43 @@ class PlansScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final plans = [
       {
-        "title": "Explorar (FREE)",
+        "title": "VoxFuture Vision (FREE)",
         "price": "R\$ 0,00",
         "features": [
-          "5 previsões por mês",
+          "5 previsões mensais",
+          "Acesso básico",
           "Gráficos simples",
-          "Acesso básico"
         ]
       },
       {
-        "title": "Orion Pro",
-        "price": "R\$ 49,90/mês",
+        "title": "VoxFuture Insight",
+        "price": "R\$ 39,90/mês",
         "features": [
-          "50 previsões/mês",
+          "40 previsões mensais",
           "Gráficos avançados",
-          "Relatórios inteligentes",
-          "1 usuário"
+          "Relatórios simples",
+          "Histórico padrão",
         ]
       },
       {
-        "title": "Orion Master",
-        "price": "R\$ 139,90/mês",
+        "title": "VoxFuture Oracle",
+        "price": "R\$ 119,90/mês",
         "features": [
-          "200 previsões/mês",
-          "Análises completas",
-          "Relatórios detalhados",
-          "Até 3 usuários"
+          "150 previsões mensais",
+          "Relatórios inteligentes",
+          "Histórico ilimitado",
+          "Prioridade nas respostas",
         ]
       },
       {
-        "title": "Orion Ultra",
-        "price": "R\$ 289,90/mês",
+        "title": "VoxFuture Infinity",
+        "price": "R\$ 249,90/mês",
         "features": [
           "Previsões ilimitadas",
           "Todos os recursos liberados",
-          "Até 10 usuários",
-          "Suporte prioritário"
+          "Gráficos avançados",
+          "Acesso antecipado a novas funções",
+          "Suporte premium",
         ]
       },
     ];
@@ -98,20 +99,27 @@ class PlansScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           ...List.generate(plan["features"].length, (i) {
-            return Row(
-              children: [
-                const Icon(Icons.check, color: Colors.amber, size: 18),
-                const SizedBox(width: 6),
-                Text(
-                  plan["features"][i],
-                  style: const TextStyle(color: Colors.white70),
-                ),
-              ],
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Row(
+                children: [
+                  const Icon(Icons.check, color: Colors.amber, size: 18),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      plan["features"][i],
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ),
+                ],
+              ),
             );
           }),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Integração com STRIPE será feita depois
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blueAccent,
               minimumSize: const Size(double.infinity, 45),
