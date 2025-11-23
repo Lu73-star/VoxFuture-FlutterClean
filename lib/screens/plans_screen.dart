@@ -1,141 +1,124 @@
 import 'package:flutter/material.dart';
 
 class PlansScreen extends StatelessWidget {
-  const PlansScreen({super.key});
+  const PlansScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final plans = [
+      {
+        "title": "Explorar (FREE)",
+        "price": "R\$ 0,00",
+        "features": [
+          "5 previsões por mês",
+          "Gráficos simples",
+          "Acesso básico"
+        ]
+      },
+      {
+        "title": "Orion Pro",
+        "price": "R\$ 49,90/mês",
+        "features": [
+          "50 previsões/mês",
+          "Gráficos avançados",
+          "Relatórios inteligentes",
+          "1 usuário"
+        ]
+      },
+      {
+        "title": "Orion Master",
+        "price": "R\$ 139,90/mês",
+        "features": [
+          "200 previsões/mês",
+          "Análises completas",
+          "Relatórios detalhados",
+          "Até 3 usuários"
+        ]
+      },
+      {
+        "title": "Orion Ultra",
+        "price": "R\$ 289,90/mês",
+        "features": [
+          "Previsões ilimitadas",
+          "Todos os recursos liberados",
+          "Até 10 usuários",
+          "Suporte prioritário"
+        ]
+      },
+    ];
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
+      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
+        centerTitle: true,
         title: const Text(
           "Planos de Assinatura",
-          style: TextStyle(
-            color: Colors.amber,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true,
       ),
-      body: ListView(
+      body: ListView.builder(
         padding: const EdgeInsets.all(20),
-        children: [
-          _buildPlanCard(
-            title: "Explorar",
-            price: "Gratuito",
-            features: [
-              "5 previsões por mês",
-              "Gráficos simples",
-              "Acesso básico ao VoxFuture",
-            ],
-            highlight: false,
-          ),
-          const SizedBox(height: 20),
-          _buildPlanCard(
-            title: "Orion Pro",
-            price: "R\$ 49,90/mês",
-            features: [
-              "50 previsões por mês",
-              "Gráficos avançados",
-              "Relatórios",
-              "1 usuário",
-            ],
-            highlight: false,
-          ),
-          const SizedBox(height: 20),
-          _buildPlanCard(
-            title: "Orion Master",
-            price: "R\$ 139,90/mês",
-            features: [
-              "200 previsões por mês",
-              "Gráficos e relatórios",
-              "Até 3 usuários",
-            ],
-            highlight: true,
-          ),
-          const SizedBox(height: 20),
-          _buildPlanCard(
-            title: "Orion Ultra",
-            price: "R\$ 289,90/mês",
-            features: [
-              "Previsões ilimitadas",
-              "Todos os recursos incluídos",
-              "Até 10 usuários",
-            ],
-            highlight: true,
-          ),
-        ],
+        itemCount: plans.length,
+        itemBuilder: (context, index) {
+          final plan = plans[index];
+          return _planCard(plan);
+        },
       ),
     );
   }
 
-  Widget _buildPlanCard({
-    required String title,
-    required String price,
-    required List<String> features,
-    required bool highlight,
-  }) {
+  Widget _planCard(Map plan) {
     return Container(
-      decoration: BoxDecoration(
-        color: highlight ? Colors.amber.withOpacity(0.15) : Colors.black54,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: highlight ? Colors.amber : Colors.white24,
-          width: 1.5,
-        ),
-      ),
+      margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white10,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white24),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
-            style: TextStyle(
-              color: highlight ? Colors.amber : Colors.white,
-              fontSize: 22,
+            plan["title"],
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.amber,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Text(
-            price,
-            style: TextStyle(
-              color: highlight ? Colors.amberAccent : Colors.amber,
+            plan["price"],
+            style: const TextStyle(
               fontSize: 18,
+              color: Colors.white,
             ),
           ),
-          const SizedBox(height: 15),
-          for (var feature in features)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                children: [
-                  const Icon(Icons.check, color: Colors.amber, size: 20),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      feature,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
+          ...List.generate(plan["features"].length, (i) {
+            return Row(
+              children: [
+                const Icon(Icons.check, color: Colors.amber, size: 18),
+                const SizedBox(width: 6),
+                Text(
+                  plan["features"][i],
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              ],
+            );
+          }),
+          const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {
-              // Em breve: integração Stripe
-            },
+            onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber,
-              foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              backgroundColor: Colors.blueAccent,
+              minimumSize: const Size(double.infinity, 45),
             ),
-            child: Text(
-              "Assinar $title",
-              style: const TextStyle(fontSize: 16),
+            child: const Text(
+              "Assinar",
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ],
