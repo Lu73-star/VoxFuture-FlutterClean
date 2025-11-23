@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:voxfuture_flutterclean/services/prediction_service.dart';
 
 class PredictionScreen extends StatefulWidget {
-  const PredictionScreen({Key? key}) : super(key: key);
+  const PredictionScreen({super.key});
 
   @override
   State<PredictionScreen> createState() => _PredictionScreenState();
@@ -10,21 +10,22 @@ class PredictionScreen extends StatefulWidget {
 
 class _PredictionScreenState extends State<PredictionScreen> {
   final TextEditingController _controller = TextEditingController();
-  final PredictionService _service = PredictionService();
+  final PredictionService _predictionService = PredictionService();
 
-  bool _loading = false;
   String _result = "";
+  bool _loading = false;
 
-  void _generatePrediction() async {
+  Future<void> _generate() async {
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
 
-    setState(() {
-      _loading = true;
-      _result = "";
-    });
+    if (text.isEmpty) {
+      setState(() => _result = "Digite algo para gerar uma previsão.");
+      return;
+    }
 
-    final response = await _service.generatePrediction(text);
+    setState(() => _loading = true);
+
+    final response = await _predictionService.generatePrediction(text);
 
     setState(() {
       _loading = false;
@@ -35,62 +36,13 @@ class _PredictionScreenState extends State<PredictionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(
-          "Nova Previsão",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text("Nova Previsão"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _controller,
-              maxLines: 4,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: "Digite sua pergunta...",
-                hintStyle: TextStyle(color: Colors.white54),
-                filled: true,
-                fillColor: Colors.grey.shade900,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            ElevatedButton(
-              onPressed: _loading ? null : _generatePrediction,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
-              ),
-              child: _loading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text(
-                      "Gerar Previsão",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-            ),
-
-            const SizedBox(height: 30),
-
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  _result,
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+            const Text(
+              "Digite sua
