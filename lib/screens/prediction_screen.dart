@@ -1,47 +1,35 @@
 import 'package:flutter/material.dart';
-import '../services/prediction_service.dart';
-import '../utils/custom_colors.dart';
+import 'package:voxfuture_flutterclean/services/prediction_service.dart';
 
 class PredictionScreen extends StatefulWidget {
-  const PredictionScreen({super.key});
+  const PredictionScreen({Key? key}) : super(key: key);
 
   @override
   State<PredictionScreen> createState() => _PredictionScreenState();
 }
 
 class _PredictionScreenState extends State<PredictionScreen> {
-  final TextEditingController inputController = TextEditingController();
-  String generatedText = "";
-  bool isLoading = false;
-  bool typing = false;
+  final TextEditingController _controller = TextEditingController();
+  final PredictionService _service = PredictionService();
 
-  Future<void> generatePrediction() async {
-    final text = inputController.text.trim();
+  bool _loading = false;
+  String _result = "";
+
+  void _generatePrediction() async {
+    final text = _controller.text.trim();
     if (text.isEmpty) return;
 
     setState(() {
-      generatedText = "";
-      typing = false;
-      isLoading = true;
+      _loading = true;
+      _result = "";
     });
 
-    final result = await PredictionService().generatePrediction(text);
+    final response = await _service.generatePrediction(text);
 
     setState(() {
-      isLoading = false;
-      typing = true;
+      _loading = false;
+      _result = response;
     });
-
-    /// Efeito digitando — letra por letra
-    for (int i = 0; i < result.length; i++) {
-      await Future.delayed(const Duration(milliseconds: 18));
-      if (!mounted) return;
-      setState(() {
-        generatedText += result[i];
-      });
-    }
-
-    setState(() => typing = false);
   }
 
   @override
@@ -50,119 +38,58 @@ class _PredictionScreenState extends State<PredictionScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        elevation: 0,
-        centerTitle: true,
         title: const Text(
           "Nova Previsão",
           style: TextStyle(color: Colors.white),
         ),
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            _inputBox(),
-            const SizedBox(height: 20),
-            _actionButton(),
-            const SizedBox(height: 30),
-            _outputBox(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _inputBox() {
-    return TextField(
-      controller: inputController,
-      maxLines: 4,
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        hintText: "Digite sua pergunta...",
-        hintStyle: const TextStyle(color: Colors.white54),
-        filled: true,
-        fillColor: Colors.white12,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Colors.white24),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Colors.amber),
-        ),
-      ),
-    );
-  }
-
-  Widget _actionButton() {
-    return InkWell(
-      onTap: isLoading ? null : generatePrediction,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: CustomColors.primary,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Center(
-          child: Text(
-            isLoading ? "Gerando..." : "Gerar Previsão",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _outputBox() {
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white10,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.amberAccent.withOpacity(0.4)),
-        ),
-        child: generatedText.isEmpty && !isLoading
-            ? const Center(
-                child: Text(
-                  "A resposta aparecerá aqui...",
-                  style: TextStyle(color: Colors.white54),
-                ),
-              )
-            : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (isLoading) ...[
-                      const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ],
-                    if (!isLoading)
-                      AnimatedOpacity(
-                        opacity: 1,
-                        duration: const Duration(milliseconds: 300),
-                        child: Text(
-                          generatedText,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            height: 1.4,
-                          ),
-                        ),
-                      ),
-                  ],
+            TextField(
+              controller: _controller,
+              maxLines: 4,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: "Digite sua pergunta...",
+                hintStyle: TextStyle(color: Colors.white54),
+                filled: true,
+                fillColor: Colors.grey.shade900,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
+            ),
+            const SizedBox(height: 20),
+
+            ElevatedButton(
+              onPressed: _loading ? null : _generatePrediction,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
+              ),
+              child: _loading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text(
+                      "Gerar Previsão",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+            ),
+
+            const SizedBox(height: 30),
+
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  _result,
+                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
