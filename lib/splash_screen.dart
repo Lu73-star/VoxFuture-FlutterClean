@@ -26,14 +26,35 @@ class _SplashScreenState extends State<TelaInicial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0A0A14),
       body: Center(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.6,
-          child: Image.asset(
-            'assets/images/logo_voxfuture_gold.png.png', // caminho CORRETO
-            fit: BoxFit.contain,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.auto_awesome,
+              size: 80,
+              color: Color(0xFFFFA800),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'VoxFuture',
+              style: TextStyle(
+                color: Color(0xFFFFA800),
+                fontSize: 42,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2,
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'AI-Powered Predictions',
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 16,
+              ),
+            ),
+          ],
         ),
       ),
     );
