@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../navigation/app_navigation.dart';
 import 'register_screen.dart';
-import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,29 +22,19 @@ class _LoginScreenState extends State<LoginScreen> {
       errorMessage = "";
     });
 
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+    await Future.delayed(const Duration(seconds: 1));
 
-      // Login OK → ir para Home
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
-
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found") {
-        errorMessage = "Usuário não encontrado.";
-      } else if (e.code == "wrong-password") {
-        errorMessage = "Senha incorreta.";
-      } else {
-        errorMessage = "Erro inesperado: ${e.message}";
+    if (emailController.text.trim().isNotEmpty && 
+        passwordController.text.trim().isNotEmpty) {
+      if (mounted) {
+        AppNavigation.goToHome(context);
       }
+    } else {
+      setState(() {
+        errorMessage = "Por favor, preencha todos os campos.";
+        loading = false;
+      });
     }
-
-    setState(() => loading = false);
   }
 
   @override

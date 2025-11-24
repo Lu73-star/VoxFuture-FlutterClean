@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:voxfuture_flutterclean/config/keys.dart';
+import '../config/keys.dart';
 
 class PredictionService {
   final String endpoint =

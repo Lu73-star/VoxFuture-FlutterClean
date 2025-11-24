@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'home_screen.dart';
+import '../navigation/app_navigation.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -27,34 +26,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
+    if (email.isEmpty || password.isEmpty) {
+      setState(() => errorMessage = "Por favor, preencha todos os campos.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setState(() => errorMessage = "A senha precisa ter pelo menos 6 caracteres.");
+      return;
+    }
+
     setState(() {
       loading = true;
       errorMessage = "";
     });
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+    await Future.delayed(const Duration(seconds: 1));
 
-      // Cadastro OK → ir para Home
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
-
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "email-already-in-use") {
-        errorMessage = "Email já está em uso.";
-      } else if (e.code == "weak-password") {
-        errorMessage = "A senha precisa ter pelo menos 6 caracteres.";
-      } else {
-        errorMessage = "Erro inesperado: ${e.message}";
-      }
+    if (mounted) {
+      AppNavigation.goToHome(context);
     }
-
-    setState(() => loading = false);
   }
 
   @override
