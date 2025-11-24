@@ -18,7 +18,7 @@ class VoxFutureApp extends StatelessWidget {
       title: 'VoxFuture',
 
       // Tema global do app
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.themeData,
 
       // Rota inicial
       initialRoute: AppNavigation.rotaSplash,
