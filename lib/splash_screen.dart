@@ -16,7 +16,7 @@ class _SplashScreenState extends State<TelaInicial> {
   }
 
   Future<void> _goNext() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
       AppNavigation.irParaLogin(context);
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<TelaInicial> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.6,
           child: Image.asset(
-            'ativose/imagense/logo_voxfuture_splash.png',
+            'assets/images/logo_voxfuture_gold.png.png', // caminho CORRETO
             fit: BoxFit.contain,
           ),
         ),
