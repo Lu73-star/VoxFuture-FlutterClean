@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'config/app_theme.dart';
-import 'config/app_routes.dart';
+import 'navigation/app_navigation.dart';
+import 'app_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,11 +13,18 @@ class VoxFutureApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'VoxFuture',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.theme,
-      initialRoute: AppRoutes.splash,
-      onGenerateRoute: AppRoutes.generateRoute,
+
+      title: 'VoxFuture',
+
+      // Tema global do app
+      theme: AppTheme.darkTheme,
+
+      // Rota inicial
+      initialRoute: AppNavigation.rotaSplash,
+
+      // Mapa de rotas
+      routes: AppNavigation.rotas,
     );
   }
 }
