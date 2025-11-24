@@ -1,53 +1,29 @@
 import 'package:flutter/material.dart';
-import '../navigation/app_navigation.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _goNext();
-  }
-
-  Future<void> _goNext() async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    // futuramente aqui verificamos FirebaseAuth
-    // por agora, sempre vai para login
-    if (mounted) {
-      AppNavigation.goToLogin(context);
-    }
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, '/login');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: Colors.black,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(
-              Icons.auto_awesome,
-              color: Colors.amber,
-              size: 80,
-            ),
-            SizedBox(height: 20),
-            Text(
-              "VoxFuture",
-              style: TextStyle(
-                color: Colors.amber,
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        child: Image.asset(
+          'assets/images/logo_voxfuture_splash.png',
+          width: 260,
         ),
       ),
     );
