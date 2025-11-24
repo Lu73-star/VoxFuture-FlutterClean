@@ -1,6 +1,13 @@
 class AppKeys {
-  // Aqui fica sua chave REAL do Replit ou da API que iremos usar futuramente.
-  // Por enquanto, deixaremos um placeholder seguro.
+  // API keys should be configured as environment variables in Replit
+  // Go to Secrets tab in Replit to add OPENAI_API_KEY
+  // This prevents exposing sensitive keys in source code
   
-  static const String apiKey = "YOUR_API_KEY_HERE";
+  static const String apiKey = String.fromEnvironment(
+    'OPENAI_API_KEY',
+    defaultValue: '',
+  );
+  
+  // Check if API key is configured
+  static bool get isConfigured => apiKey.isNotEmpty;
 }

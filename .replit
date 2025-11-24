@@ -22,18 +22,31 @@ args = "Flutter Web Server"
 name = "Flutter Web Server"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "flutter run -d web-server --web-hostname 0.0.0.0 --web-port 5000"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "flutter run -d web-server --web-hostname 0.0.0.0 --web-port 5000 --dart-define=OPENAI_API_KEY=${OPENAI_API_KEY:-}"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
 externalPort = 5000
 
 [[ports]]
+localPort = 37135
+externalPort = 3001
+
+[[ports]]
+localPort = 39451
+externalPort = 3000
+
+[[ports]]
 localPort = 41183
 externalPort = 80
+
+[deployment]
+deploymentTarget = "static"
+build = ["bash", "-c", "flutter build web --release --dart-define=OPENAI_API_KEY=${OPENAI_API_KEY:-}"]
+publicDir = "build/web"

@@ -25,7 +25,6 @@ VoxFuture is a Flutter web application for AI-powered predictions. The app featu
 lib/
 ├── main.dart                 # App entry point
 ├── app_theme.dart           # Global theme configuration
-├── splash_screen.dart       # Initial splash/loading screen
 ├── config/
 │   ├── app_routes.dart      # Route configuration
 │   ├── config.dart          # App configuration
@@ -69,15 +68,39 @@ lib/
 - `http`: For API calls
 - `flutter_lints`: Code quality and linting
 
+## Security Configuration
+
+### API Keys
+The app uses Replit Secrets for secure API key management:
+
+1. **OpenAI API Key Configuration**:
+   - Go to the Secrets tab in Replit (🔒 icon in sidebar)
+   - Add a new secret with key: `OPENAI_API_KEY`
+   - Paste your OpenAI API key as the value
+   - The workflow automatically passes this to Flutter via `--dart-define`
+
+2. **How it works**:
+   - The workflow command includes `--dart-define=OPENAI_API_KEY=${OPENAI_API_KEY:-}`
+   - This passes the secret from Replit to the Flutter app at compile time
+   - The deployment build also includes this configuration
+   - The prediction service validates the key before making API calls
+
+3. **Key Features**:
+   - No API keys are committed to source code
+   - Keys are injected at build/run time
+   - Helpful error messages if key is not configured
+   - Network error handling included
+
 ## Notes
 - Firebase integration was removed for simplification - can be re-added later
-- API keys should be moved to environment variables before production deployment
 - Image assets exist but were replaced with icons for splash screen
 - The app is configured for web deployment with proper host settings for Replit
+- All API keys use environment variables (Replit Secrets) - never commit keys to source code
+- The splash screen automatically redirects to login after 3 seconds
 
 ## Future Enhancements
-- Add Firebase authentication
-- Integrate with prediction API
+- Add Firebase authentication for real user management
+- Integrate with prediction API (OpenAI key configuration ready)
 - Implement subscription management
-- Add persistent storage for history
-- Configure proper API key management with environment variables
+- Add persistent storage for prediction history
+- Add user profile management

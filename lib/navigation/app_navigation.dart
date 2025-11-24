@@ -5,7 +5,7 @@ import '../screens/home_screen.dart';
 import '../screens/history_screen.dart';
 import '../screens/prediction_screen.dart';
 import '../screens/plans_screen.dart';
-import '../splash_screen.dart';
+import '../screens/splash_screen.dart';
 
 class AppNavigation {
   // Rotas nomeadas
@@ -19,7 +19,7 @@ class AppNavigation {
 
   // Mapa de rotas
   static Map<String, WidgetBuilder> rotas = {
-    rotaSplash: (context) => const TelaInicial(),
+    rotaSplash: (context) => const SplashScreen(),
     rotaLogin: (context) => const LoginScreen(),
     rotaCadastro: (context) => const RegisterScreen(),
     rotaHome: (context) => const HomeScreen(),
