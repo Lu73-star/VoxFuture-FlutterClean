@@ -39,11 +39,19 @@ localPort = 37135
 externalPort = 3001
 
 [[ports]]
+localPort = 37867
+externalPort = 3002
+
+[[ports]]
 localPort = 39451
 externalPort = 3000
 
 [[ports]]
-localPort = 41183
+localPort = 43025
+externalPort = 3003
+
+[[ports]]
+localPort = 44753
 externalPort = 80
 
 [deployment]
