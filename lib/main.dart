@@ -9,39 +9,45 @@ class VoxFutureApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryGold = Color(0xFFFFA800);
-    const background = Color(0xFF050814);
-
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'VoxFuture',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: background,
-        colorScheme: const ColorScheme.dark(
-          primary: primaryGold,
-          secondary: primaryGold,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF0D47A1), // azul profundo
+          brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
-      home: const VoxFutureHome(),
+      home: const VoxFutureHomePage(),
     );
   }
 }
 
-class VoxFutureHome extends StatelessWidget {
-  const VoxFutureHome({super.key});
+class VoxFutureHomePage extends StatelessWidget {
+  const VoxFutureHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('VoxFuture'),
-      ),
-      body: const Center(
-        child: Text(
-          'VoxFuture pronto para compilar.',
-          style: TextStyle(fontSize: 18),
-          textAlign: TextAlign.center,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Text(
+              'VoxFuture',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              'Estrutura Flutter básica pronta.\nPronta para integrar voz e IA.',
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
