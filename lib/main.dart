@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const VoxFutureApp());
 }
 
@@ -10,44 +14,37 @@ class VoxFutureApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'VoxFuture',
       debugShowCheckedModeBanner: false,
+      title: 'VoxFuture',
       theme: ThemeData(
         brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0D47A1), // azul profundo
-          brightness: Brightness.dark,
+        primaryColor: const Color(0xFF0A0F28),
+        scaffoldBackgroundColor: const Color(0xFF0A0F28),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF1A224F),
+          secondary: Color(0xFFD4AF37),
         ),
-        useMaterial3: true,
+        fontFamily: 'Roboto',
       ),
-      home: const VoxFutureHomePage(),
+      home: const HomePage(),
     );
   }
 }
 
-class VoxFutureHomePage extends StatelessWidget {
-  const VoxFutureHomePage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            Text(
-              'VoxFuture',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 12),
-            Text(
-              'Estrutura Flutter básica pronta.\nPronta para integrar voz e IA.',
-              textAlign: TextAlign.center,
-            ),
-          ],
+      appBar: AppBar(
+        title: const Text('VoxFuture'),
+        centerTitle: true,
+      ),
+      body: const Center(
+        child: Text(
+          'VoxFuture está vivo.',
+          style: TextStyle(fontSize: 22),
         ),
       ),
     );
