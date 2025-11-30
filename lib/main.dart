@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'config/app_theme.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
+void main() {
   runApp(const VoxFutureApp());
 }
 
@@ -16,16 +13,7 @@ class VoxFutureApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'VoxFuture',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: const Color(0xFF0A0F28),
-        scaffoldBackgroundColor: const Color(0xFF0A0F28),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF1A224F),
-          secondary: Color(0xFFD4AF37),
-        ),
-        fontFamily: 'Roboto',
-      ),
+      theme: AppTheme.darkTheme,
       home: const HomePage(),
     );
   }
