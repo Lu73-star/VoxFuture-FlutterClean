@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'features/voice/voice_page.dart';
 
 void main() {
   runApp(const VoxFutureApp());
@@ -24,6 +25,9 @@ class VoxFutureApp extends StatelessWidget {
         ),
       ),
       home: const VoxFutureHome(),
+      routes: {
+        '/voice': (context) => const VoicePage(),
+      },
     );
   }
 }
@@ -37,11 +41,22 @@ class VoxFutureHome extends StatelessWidget {
       appBar: AppBar(
         title: const Text('VoxFuture'),
       ),
-      body: const Center(
-        child: Text(
-          'VoxFuture pronto para compilar.',
-          style: TextStyle(fontSize: 18),
-          textAlign: TextAlign.center,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'VoxFuture pronto para compilar.',
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.mic),
+              label: const Text('Abrir Voice Page'),
+              onPressed: () => Navigator.of(context).pushNamed('/voice'),
+            ),
+          ],
         ),
       ),
     );
