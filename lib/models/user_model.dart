@@ -1,27 +1,9 @@
-class UserModel {
+class AppUser {
   final String uid;
-  final String? name;
-  final String? email;
+  final String email;
 
-  UserModel({
+  AppUser({
     required this.uid,
-    this.name,
-    this.email,
+    required this.email,
   });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'uid': uid,
-      'name': name,
-      'email': email,
-    };
-  }
-
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      uid: map['uid'],
-      name: map['name'],
-      email: map['email'],
-    );
-  }
 }
