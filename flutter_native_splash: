@@ -1,1 +1,9 @@
+flutter_native_splash:
+  color: "#06102E" # fundo azul VoxFuture
+  image: assets/splash/blue/splash_1080x1920.png
+  fullscreen: true
 
+android_12:
+  color: "#06102E"
+  image: assets/splash/blue/splash_1080x1920.png
+  icon_background_color: "#06102E"
