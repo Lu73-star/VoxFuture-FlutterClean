@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'services/auth_service.dart';
+import 'screens/auth_wrapper.dart';
 import 'services/firebase_options.dart';
-import 'screens/home_page.dart'; // ajuste conforme sua estrutura
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,4 +12,16 @@ void main() async {
   );
 
   runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const AuthWrapper(),
+    );
+  }
 }
