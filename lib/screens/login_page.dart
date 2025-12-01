@@ -5,6 +5,8 @@ import 'forgot_password_page.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -12,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final email = TextEditingController();
   final password = TextEditingController();
+
   String? errorMessage;
 
   @override
@@ -32,85 +35,108 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 40),
 
-              // Email
+              const SizedBox(height: 30),
+
+              // EMAIL
               TextField(
                 controller: email,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
-                  labelText: "Email",
-                  labelStyle: TextStyle(color: Colors.white),
+                  hintText: "Email",
+                  hintStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.black26,
+                  border: OutlineInputBorder(),
                 ),
               ),
 
-              // Password
+              const SizedBox(height: 15),
+
+              // SENHA
               TextField(
                 controller: password,
                 obscureText: true,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
-                  labelText: "Senha",
-                  labelStyle: TextStyle(color: Colors.white),
+                  hintText: "Senha",
+                  hintStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.black26,
+                  border: OutlineInputBorder(),
                 ),
               ),
 
               const SizedBox(height: 20),
 
-              // Error
-              if (errorMessage != null)
-                Text(
-                  errorMessage!,
-                  style: const TextStyle(color: Colors.red, fontSize: 14),
-                ),
-
-              const SizedBox(height: 20),
-
-              // Botão login
+              // BOTÃO LOGIN
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber,
+                  minimumSize: const Size(double.infinity, 50),
+                ),
                 onPressed: () async {
-                  String? result = await AuthService()
-                      .login(email.text, password.text);
+                  final result = await AuthService.login(
+                    email.text.trim(),
+                    password.text.trim(),
+                  );
 
-                  if (result != null) {
-                    setState(() => errorMessage = result);
+                  if (result == "ok") {
+                    // LOGIN OK → VAI PARA HOME
+                    if (!mounted) return;
+                    Navigator.pushReplacementNamed(context, '/home');
                   } else {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => const HomePage()),
-                    );
+                    // LOGIN FALHOU → MOSTRA ERRO
+                    setState(() {
+                      errorMessage = result;
+                    });
                   }
                 },
-                child: const Text("Entrar"),
+                child: const Text(
+                  "Entrar",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
 
+              if (errorMessage != null) ...[
+                const SizedBox(height: 10),
+                Text(
+                  errorMessage!,
+                  style: const TextStyle(color: Colors.redAccent),
+                )
+              ],
+
+              const SizedBox(height: 20),
+
+              // ESQUECEU A SENHA
               TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => ForgotPasswordPage()),
+                      builder: (context) => const ForgotPasswordPage(),
+                    ),
                   );
                 },
                 child: const Text(
                   "Esqueci minha senha",
-                  style: TextStyle(color: Colors.amber),
+                  style: TextStyle(color: Colors.white70),
                 ),
               ),
 
+              // REGISTRAR
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => RegisterPage()),
-                  );
+                  Navigator.pushNamed(context, '/register');
                 },
                 child: const Text(
                   "Criar conta",
-                  style: TextStyle(color: Colors.amber),
+                  style: TextStyle(color: Colors.white70),
                 ),
-              ),
+              )
             ],
           ),
         ),
