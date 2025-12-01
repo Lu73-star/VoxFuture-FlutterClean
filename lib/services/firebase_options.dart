@@ -1,16 +1,15 @@
 // File: lib/services/firebase_options.dart
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform, kIsWeb;
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      // 🔥 A versão WEB ainda NÃO está configurada no Firebase
-      // Então deixamos um placeholder seguro:
       throw UnsupportedError(
-        'Firebase Web não está configurado. Adicione um app Web no Firebase Console '
-        'e depois gere um novo firebase_options.dart usando: flutterfire configure',
+        'A configuração Web ainda não foi adicionada. '
+        'Registre o app Web no Firebase e envie a config.',
       );
     }
 
@@ -18,7 +17,21 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'Configuração iOS não encontrada. Adicione para ativar no iPhone.',
+        );
       default:
         throw UnsupportedError(
-          'Plataforma não suportada
+          'Plataforma não suportada para Firebase.');
+    }
+  }
+
+  // ANDROID
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: "AIzaSyA-2VvvLbrYF0xvm237XqV7uZttsQMlj9c",
+    appId: "1:957218435739:android:fdb486ad33baa37bcdcc3e",
+    messagingSenderId: "957218435739",
+    projectId: "voxfuture-12d52",
+    storageBucket: "voxfuture-12d52.firebasestorage.app",
+  );
+}
