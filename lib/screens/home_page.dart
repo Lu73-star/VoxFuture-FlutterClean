@@ -6,14 +6,27 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('VoxFuture'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'VoxFuture está vivo.',
-          style: TextStyle(fontSize: 22),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              "VoxFuture",
+              style: TextStyle(
+                color: Color(0xFFFFC300),
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 24),
+            Text(
+              "VoxFuture está vivo.",
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
       ),
     );
