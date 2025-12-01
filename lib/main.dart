@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'routes.dart'; // mantém suas rotas já existentes
+import 'routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const VoxFutureApp());
+  runApp(const VoxFuture());
 }
 
-class VoxFutureApp extends StatelessWidget {
-  const VoxFutureApp({super.key});
+class VoxFuture extends StatelessWidget {
+  const VoxFuture({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,36 +16,53 @@ class VoxFutureApp extends StatelessWidget {
       title: "VoxFuture",
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0A0F1F), // Fundo azul-escuro
-        primaryColor: const Color(0xFFFFC300), // Dourado vivo
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFFFC300),
-          secondary: Color(0xFFFFC300),
-        ),
+        scaffoldBackgroundColor: const Color(0xFF060B1A), // Azul espacial profundo
+
         textTheme: const TextTheme(
           bodyMedium: TextStyle(color: Colors.white),
           bodyLarge: TextStyle(color: Colors.white),
           titleLarge: TextStyle(
-            color: Color(0xFFFFC300),
-            fontWeight: FontWeight.bold,
-            fontSize: 26,
+            color: Color(0xFFFFD44A), // Dourado vivo
+            fontWeight: FontWeight.w700,
+            fontSize: 28,
           ),
         ),
+
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFFFFD44A),
+          secondary: Color(0xFFFFD44A),
+        ),
+
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.white10,
+          fillColor: Colors.white12,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.white24),
+            borderRadius: BorderRadius.all(Radius.circular(14)),
+            borderSide: BorderSide(color: Colors.white30),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.white24),
+            borderRadius: BorderRadius.all(Radius.circular(14)),
+            borderSide: BorderSide(color: Colors.white30),
           ),
-          labelStyle: const TextStyle(color: Colors.white70),
+          labelStyle: TextStyle(color: Colors.white70),
+        ),
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFFFD44A),
+            foregroundColor: const Color(0xFF060B1A),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            textStyle: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: "/",
       onGenerateRoute: Routes.generateRoute,
     );
   }
