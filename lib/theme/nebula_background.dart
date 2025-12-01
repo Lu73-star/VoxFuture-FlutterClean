@@ -1,113 +1,139 @@
+// File: lib/widgets/nebula_background.dart
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
-class NebulaBackground extends StatefulWidget {
+class NebulaBackground extends StatelessWidget {
   final Widget child;
 
-  const NebulaBackground({super.key, required this.child});
-
-  @override
-  State<NebulaBackground> createState() => _NebulaBackgroundState();
-}
-
-class _NebulaBackgroundState extends State<NebulaBackground>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 22),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  const NebulaBackground({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, _) {
-        return CustomPaint(
-          painter: _NebulaPainter(_controller.value),
-          child: widget.child,
-        );
-      },
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF020617), // azul espaço profundo
+            Color(0xFF020617),
+            Color(0xFF05001A), // roxo escuro no rodapé
+          ],
+        ),
+      ),
+      child: Stack(
+        children: [
+          // Glow esquerdo
+          Positioned(
+            top: -80,
+            left: -40,
+            child: _NebulaGlow(
+              color: const Color(0xFF38BDF8).withOpacity(0.45),
+              size: 260,
+            ),
+          ),
+
+          // Glow direito
+          Positioned(
+            bottom: -60,
+            right: -30,
+            child: _NebulaGlow(
+              color: const Color(0xFFFFC94A).withOpacity(0.50),
+              size: 260,
+            ),
+          ),
+
+          // Pontos de estrela
+          const _StarField(),
+
+          // Véu escuro para não atrapalhar legibilidade
+          Container(
+            color: Colors.black.withOpacity(0.35),
+          ),
+
+          // Conteúdo da tela (Scaffold, etc.)
+          child,
+        ],
+      ),
     );
   }
 }
 
-class _NebulaPainter extends CustomPainter {
-  final double progress;
-  _NebulaPainter(this.progress);
+class _NebulaGlow extends StatelessWidget {
+  final Color color;
+  final double size;
+
+  const _NebulaGlow({
+    Key? key,
+    required this.color,
+    required this.size,
+  }) : super(key: key);
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint();
-
-    // Fundo cósmico azul profundo
-    final gradient = LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [
-        const Color(0xFF020024),
-        const Color(0xFF090979),
-        const Color(0xFF4F00BC),
-      ],
-    );
-
-    paint.shader = gradient.createShader(Offset.zero & size);
-    canvas.drawRect(Offset.zero & size, paint);
-
-    final starPaint = Paint()
-      ..color = Colors.white.withOpacity(0.8)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
-
-    final rand = Random(50);
-
-    // Estrelas piscando
-    for (var i = 0; i < 150; i++) {
-      final x = rand.nextDouble() * size.width;
-      final y = rand.nextDouble() * size.height;
-      final radius = (rand.nextDouble() * 1.5) + 0.5;
-
-      final flicker =
-          0.5 + 0.5 * sin(progress * 2 * pi + (i * 0.1)); // brilho suave
-
-      canvas.drawCircle(
-        Offset(x, y),
-        radius * flicker,
-        starPaint,
-      );
-    }
-
-    // Nebulosa dourada suave
-    final nebulaPaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          Colors.amber.withOpacity(0.25),
-          Colors.transparent,
-        ],
-      ).createShader(
-        Rect.fromCircle(
-          center: Offset(size.width * 0.6, size.height * 0.4),
-          radius: size.width * 0.9,
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              colors: [
+                color,
+                Colors.transparent,
+              ],
+            ),
+          ),
         ),
-      );
-
-    canvas.drawCircle(
-      Offset(size.width * 0.6, size.height * 0.4),
-      size.width * 0.9,
-      nebulaPaint,
+      ),
     );
+  }
+}
+
+class _StarField extends StatelessWidget {
+  const _StarField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Pontos simples de luz – leve para Web e Android
+    return IgnorePointer(
+      child: CustomPaint(
+        painter: _StarFieldPainter(),
+        size: Size.infinite,
+      ),
+    );
+  }
+}
+
+class _StarFieldPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.65)
+      ..style = PaintingStyle.fill;
+
+    final randomPoints = <Offset>[
+      Offset(size.width * 0.15, size.height * 0.18),
+      Offset(size.width * 0.35, size.height * 0.12),
+      Offset(size.width * 0.65, size.height * 0.20),
+      Offset(size.width * 0.80, size.height * 0.10),
+      Offset(size.width * 0.25, size.height * 0.45),
+      Offset(size.width * 0.55, size.height * 0.38),
+      Offset(size.width * 0.78, size.height * 0.42),
+      Offset(size.width * 0.18, size.height * 0.72),
+      Offset(size.width * 0.42, size.height * 0.80),
+      Offset(size.width * 0.70, size.height * 0.75),
+    ];
+
+    for (final p in randomPoints) {
+      canvas.drawCircle(p, 0.9, paint);
+    }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
