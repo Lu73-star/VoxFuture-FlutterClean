@@ -1,40 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
-import 'services/firebase_options.dart';
-import 'screens/auth_wrapper.dart';
+import 'routes.dart'; // mantém suas rotas já existentes
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Inicialização correta para WEB
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  } else {
-    await Firebase.initializeApp();
-  }
-
-  runApp(const MyApp());
+  runApp(const VoxFutureApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class VoxFutureApp extends StatelessWidget {
+  const VoxFutureApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "VoxFuture",
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.black,
-        primaryColor: Colors.amber,
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0A0F1F), // Fundo azul-escuro
+        primaryColor: const Color(0xFFFFC300), // Dourado vivo
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFFFFC300),
+          secondary: Color(0xFFFFC300),
+        ),
         textTheme: const TextTheme(
           bodyMedium: TextStyle(color: Colors.white),
+          bodyLarge: TextStyle(color: Colors.white),
+          titleLarge: TextStyle(
+            color: Color(0xFFFFC300),
+            fontWeight: FontWeight.bold,
+            fontSize: 26,
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white10,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.white24),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.white24),
+          ),
+          labelStyle: const TextStyle(color: Colors.white70),
         ),
       ),
-      home: const AuthWrapper(),   // Redirecionamento automático
+      initialRoute: '/',
+      onGenerateRoute: Routes.generateRoute,
     );
   }
 }
