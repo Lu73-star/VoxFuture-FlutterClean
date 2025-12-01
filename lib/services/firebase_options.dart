@@ -16,7 +16,7 @@ class DefaultFirebaseOptions {
 
       case TargetPlatform.iOS:
         throw UnsupportedError(
-          'Configuração iOS não encontrada.',
+          'Configuração iOS não encontrada. Registre um app iOS no Firebase e atualize este arquivo.',
         );
 
       default:
@@ -26,27 +26,4 @@ class DefaultFirebaseOptions {
     }
   }
 
-  // ------------------------------------------------------------
-  // ANDROID
-  // ------------------------------------------------------------
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: "AIzaSyA-2VvvLbrYF0xvm237XqV7uZttsQMlj9c",
-    appId: "1:957218435739:android:fdb486ad33baa37bcdcc3e",
-    messagingSenderId: "957218435739",
-    projectId: "voxfuture-12d52",
-    storageBucket: "voxfuture-12d52.firebasestorage.app",
-  );
-
-  // ------------------------------------------------------------
-  // WEB
-  // ------------------------------------------------------------
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: "AIzaSyDUDiuIYmPCf4_KjKqkgZz43ym5oVio-EA",
-    authDomain: "voxfuture-12d52.firebaseapp.com",
-    projectId: "voxfuture-12d52",
-    storageBucket: "voxfuture-12d52.firebasestorage.app",
-    messagingSenderId: "957218435739",
-    appId: "1:957218435739:web:0dba10898b7cbb61cdcc3e",
-    measurementId: "G-BBPEBEZY6H",
-  );
-}
+  // 🔥 CONFIGURAÇÃO WEB — ATUALIZADA E
