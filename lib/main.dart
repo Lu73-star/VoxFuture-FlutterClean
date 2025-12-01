@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import 'config/routes.dart';
+import 'package:flutter/foundation.dart';
 import 'services/firebase_options.dart';
+import 'screens/auth_wrapper.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // Inicialização correta para WEB
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
 
   runApp(const MyApp());
 }
@@ -21,10 +26,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'VoxFuture',
-      initialRoute: '/', // Login é a tela inicial
-      routes: AppRoutes.routes,
-      theme: ThemeData.dark(), // mantém o tema azul/dourado depois se quiser
+      title: "VoxFuture",
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
+        primaryColor: Colors.amber,
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Colors.white),
+        ),
+      ),
+      home: const AuthWrapper(),   // Redirecionamento automático
     );
   }
 }
