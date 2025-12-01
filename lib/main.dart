@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'services/auth_service.dart';
-import 'screens/auth_wrapper.dart';
+
+import 'config/routes.dart';
 import 'services/firebase_options.dart';
 
 void main() async {
@@ -21,7 +21,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const AuthWrapper(),
+      title: 'VoxFuture',
+      initialRoute: '/', // Login é a tela inicial
+      routes: AppRoutes.routes,
+      theme: ThemeData.dark(), // mantém o tema azul/dourado depois se quiser
     );
   }
 }
