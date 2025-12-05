@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'features/voice/voice_page.dart';
+import 'theme/nebula_theme.dart';
 
 void main() {
-  runApp(const VoxFutureApp());
+  runApp(const VoxFuture());
 }
 
-class VoxFutureApp extends StatelessWidget {
-  const VoxFutureApp({super.key});
+class VoxFuture extends StatelessWidget {
+  const VoxFuture({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const primaryGold = Color(0xFFFFA800);
-    const background = Color(0xFF050814);
-
     return MaterialApp(
+      title: "VoxFuture",
       debugShowCheckedModeBanner: false,
-      title: 'VoxFuture',
+       title: 'VoxFuture',
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: background,

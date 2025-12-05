@@ -1,0 +1,21 @@
+flutter_native_splash:
+  # Cor de fundo da tela inicial
+  color: "#050811"
+
+  # Caminho exato do PNG (maiúsculo, igual ao arquivo real)
+  image: assets/splash/blue/splash_1080x1920.PNG
+
+  # Ativar splash para Android
+  android: true
+  android_gravity: center
+
+  # Ativar splash para iOS
+  ios: true
+  ios_content_mode: center
+
+  # Modo escuro (opcional — pode remover se quiser)
+  color_dark: "#050811"
+  image_dark: assets/splash/blue/splash_1080x1920.PNG
+
+  # Web (não estamos usando, mas deixo configurado por segurança)
+  web: false
